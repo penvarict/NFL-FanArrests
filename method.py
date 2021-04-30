@@ -18,5 +18,11 @@ def random_sample(frame : pd,samples_total = 300, sample_size = 30,var = False):
             sample_stats.append(stats.tmean(samples))
     return sample_stats
 
-def t_interval(list, ci = .95 ):
-    return stats.t.interval(ci,len(list)-1, loc = stats.tmean(list) )
+def t_interval(list, alf = .05):
+    return stats.t.interval(alf,len(list)-1, loc = stats.tmean(list) )
+
+def chi_2(list, alf = .05):
+    upper = ((len(list)-1)*stats.tvar(list)) / (stats.chi2.ppf(alf/2, len(list)-1))
+    lower = ((len(list)-1)*stats.tvar(list)) / (stats.chi2.ppf(1 - (alf/2), len(list)-1))
+
+    return (lower,upper)
