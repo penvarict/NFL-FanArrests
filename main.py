@@ -38,7 +38,7 @@ score_games_lessthan_1std_home = team_cut[team_cut['arrests'] < 15.67]
 score_games_lessthan_1std_home = score_games_lessthan_1std_home['home_score']
 
 #-extract total points scored
-#team_cut['total_points'] = team_cut['home_score'] + team_cut['away_score']
+total_points_cut = team_cut['home_score'] + team_cut['away_score']
 
 #-extract scoring details
 winning_home_team_scores = []
@@ -54,11 +54,14 @@ for score_home, score_away in zip(home_score_cut,away_score_cut):
 
 #-- extract winning home teams and arrests
 home_team_wins = team_cut[team_cut['home_score']>team_cut['away_score']]
-home_team_wins = home_team_wins['arrests']
-
+home_team_wins_arrests = home_team_wins['arrests']
+ht_win_arrests_clt = method.random_sample(home_team_wins_arrests, samples_total=150)
+ht_win_arrests_clt_var = method.random_sample(home_team_wins_arrests, var=True ,samples_total=150)
 #--extract losing home teams and arrests
 home_team_losses = team_cut[team_cut['home_score']<team_cut['away_score']]
-home_team_losses = home_team_losses['arrests']
+home_team_losses_arrests = home_team_losses['arrests']
+ht_loss_arrests_clt = method.random_sample(home_team_losses_arrests,samples_total=150)
+ht_loss_arrests_clt_var = method.random_sample(home_team_losses_arrests, var=True ,samples_total=150)
 
 
 #--boilerplate display whole frame
@@ -72,52 +75,41 @@ total_arrests_by_teams = team_cut.groupby('home_team')['arrests'].sum().reset_in
 avg_arrests_per_game = team_cut.groupby('home_team')['arrests'].mean().reset_index(name='mean_arr')
 
 #-arrests by point differential
-lose_lt_12 = team_cut[team_cut['away_score']-team_cut['home_score'] < 12]
-lose_lt_12 = lose_lt_12['arrests']
+#-- home lost by less than 12
+lose_lt_12_arr = team_cut[team_cut['away_score'] - team_cut['home_score'] < 12]
+lose_lt_12_arr = lose_lt_12_arr['arrests']
 
-lose_mt_12 = team_cut[team_cut['away_score']-team_cut['home_score'] > 12]
-lose_mt_12 = lose_mt_12['arrests']
+lose_mt_12_arr = team_cut[team_cut['away_score'] - team_cut['home_score'] > 12]
+lose_mt_12_arr = lose_mt_12_arr['arrests']
 
-win_mt_12 = team_cut[team_cut['home_score']-team_cut['away_score'] > 12]
-win_mt_12 = win_mt_12['arrests']
+#--home team won by more than 12
+win_mt_12_arr = team_cut[team_cut['home_score'] - team_cut['away_score'] > 12]
+win_mt_12_arr = win_mt_12_arr['arrests']
 
-win_lt_12 = team_cut[team_cut['home_score']-team_cut['away_score'] < 12]
-win_lt_12 = win_lt_12['arrests']
+win_lt_12_arr = team_cut[team_cut['home_score']-team_cut['away_score'] <= 12]
+win_lt_12_arr = win_lt_12_arr['arrests']
 
 ######################################################################################
 #**** Extract statistics ****
 ######################################################################################
 
 #-**** selected statistics ****
+
 avg_points_scored_above_mean_home = stats.tmean(score_games_morethan_6_home)
 var_points_scored_above_mean_home = stats.tvar(score_games_morethan_6_home)
+
+avg_points_scored_below_mean_home = stats.tmean(score_games_lessthan_6_home)
+var_points_scored_below_mean_home = stats.tvar(score_games_lessthan_6_home)
+
 ci_above_mean_home = stats.t.interval(0.95, len(score_games_morethan_6_home)-1, loc=avg_points_scored_above_mean_home)
 
 print(f"The average points scored by home teams with more than the mean arrests {avg_points_scored_above_mean_home}\n"
       f"n = {len(score_games_morethan_6_home)}, ci = {ci_above_mean_home}")
 print(f"The sample variance of the distribution of home teams with more than the mean arrests is {var_points_scored_above_mean_home}")
 
-avg_points_scored_below_mean_arrests_home = stats.tmean(score_games_lessthan_6_home)
-var_points_scored_below_mean_home = stats.tvar(score_games_lessthan_6_home)
-print(f"The average points scored by home teams with less than the mean arrests {avg_points_scored_below_mean_arrests_home}")
-print(f"The sample variance of the distribution of home team points with less than the mean arrests is {var_points_scored_below_mean_home}")
-
-avg_point_diff = stats.tmean(point_differential)
-print(f"Average point differential {avg_point_diff}")
-
-
-score_games_morethan_1std_arr_home_mean = stats.tmean(score_games_morethan_1std_home)
-score_games_morethan_1std_arr_home_var = stats.tvar(score_games_morethan_1std_home)
-print(f"The average points scored by games that are in the upper 15.9% of fan arrests {score_games_morethan_1std_arr_home_mean}\n"
-      f"n = {len(score_games_morethan_1std_home)}")
-print(f"The variance of the distribution of games in the 15.9 % of fan arrests {score_games_morethan_1std_arr_home_var}")
-
-score_games_lessthan_1std_home_mean = stats.tmean(score_games_lessthan_1std_home)
-score_games_lessthan_1std_home_var = stats.tvar(score_games_lessthan_1std_home)
-print(f"The average points scored by home teams who are in the lower 15.9% of fan arrests {score_games_lessthan_1std_home_mean}\n"
-      f"n = {len(score_games_lessthan_1std_home)}")
-print(f"The variance of the distribution of home teams fan arrests who are in the lower 15.9 % of fan arrests {score_games_lessthan_1std_home_var}")
-
+print(f"The average points scored by home teams with less than the mean arrests {avg_points_scored_below_mean_home}\n"
+      f"n = {len(score_games_lessthan_6_home)}, ci = {method.t_interval(score_games_lessthan_6_home)}")
+print(f"The sample variance of the distribution of home teams with more than the mean arrests is {var_points_scored_below_mean_home}")
 
 t_tup_below_above = stats.ttest_ind(score_games_morethan_6_home, score_games_lessthan_6_home)
 print(f"T-test, equal variance,upper 50% fan arrests, Lower 50% fan arrests {t_tup_below_above}")
@@ -125,7 +117,31 @@ print(f"T-test, equal variance,upper 50% fan arrests, Lower 50% fan arrests {t_t
 t_tup_below_above_1std = stats.ttest_ind(score_games_lessthan_1std_home,score_games_morethan_1std_home)
 print(f"T-test, equal variance,upper 15.9% fan arrests, Lower 15.9% fan arrests {t_tup_below_above}")
 
+mean_arrests_ht_win = stats.tmean(home_team_wins_arrests)
+mean_arrests_ht_loss = stats.tmean(home_team_losses_arrests)
+var_arrests_ht_win = stats.tvar(ht_win_arrests_clt_var)
+var_arrests_ht_loss = stats.tvar(ht_loss_arrests_clt_var)
+
+print(f"The average arrests where ht won {mean_arrests_ht_win}, ci {method.t_interval(home_team_wins_arrests)}")
+print(f"var {var_arrests_ht_win}")
+print(f"The average arrests where ht lost {mean_arrests_ht_loss}, ci {method.t_interval(home_team_losses_arrests)}")
+print(f"var {var_arrests_ht_loss}")
+print(f"t-test {stats.ttest_ind(ht_win_arrests_clt,ht_loss_arrests_clt,equal_var=False)}")
+
+
 #-**** population stats****
+print('#'*20)
+print("Population Statistics: \n")
+avg_total_points_scored = stats.tmean(total_points_cut)
+print(f"Average total points scored {avg_total_points_scored}")
+avg_point_diff = stats.tmean(point_differential)
+print(f"Average point differential {avg_point_diff}")
+
+avg_home_team_win_score = stats.tmean(home_team_wins['home_score'])
+print(f"Average score of winning teams: {avg_home_team_win_score}, n = {len(home_team_wins['home_score'])}")
+avg_home_team_loss_score = stats.tmean(home_team_losses['home_score'])
+print(f"Average score of losing teams: {avg_home_team_loss_score}, n = {len(home_team_losses['home_score'])}")
+
 mean_arrests = stats.tmean(arrests_cut)
 print(f'The mean arrests per game is {mean_arrests}')
 
@@ -133,6 +149,9 @@ print(f'The mean arrests per game is {mean_arrests}')
 clt_arrests = method.random_sample(arrests_cut) #extract the population of sample means
 #--extract the variance of the sample means
 clt_arrests_var = stats.tvar(clt_arrests)
+clt_arrests_mean = stats.tmean(clt_arrests)
+print(f'The mean of sample mean arrests per game is {clt_arrests_mean}\n'
+      f'Confidence interval {method.t_interval(clt_arrests)}')
 print(f'The var of sample mean arrests per game is {clt_arrests_var}, standard deviation is {sqrt(clt_arrests_var)}')
 
 #--central limit thm for the sample variances of arrests.
@@ -152,41 +171,140 @@ print(f"The confidence interval of the variance by chi squared dist is {ci_v}")
 
 
 #-plots
+axis_size = 17
+title_sz = 20
+tick_sz = 15
+pt_x_size = 10
+pt_y_size = 5.6
+left_p = .093
+bot_p = .126
+right_p = .981
+top_p = .8
+wspace = hspace = .02
+
+
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
 pyplot.hist(arrests_cut,bins = 30,density= True)
-pyplot.gca().set(title='Distribution of The Arrests of Fans at NFL Stadiums\n 2011-2015',xlabel='Arrests' ,ylabel='Probability Density')
-pyplot.figure()
+pyplot.xlabel('Arrests', fontsize = axis_size)
+pyplot.ylabel('Probability Density' , fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title(label='Distribution of The Arrests of Fans at NFL Stadiums\n 2011-2015',
+             fontsize = title_sz )
+
+pyplot.subplots_adjust(    top=top_p,
+    bottom=bot_p,
+    left=left_p,
+    right=right_p,
+    hspace=hspace,
+    wspace=wspace)
+pyplot.savefig('ArrestsPerGameDist.png')
+
+
+
 
 # pyplot.hist(winning_home_team_scores, bins = 30, density=True)
 # pyplot.gca().set(title='Distribution of Scores of Winning Home Teams\n 2011-2015',xlabel='Points' ,ylabel='Probability')
 # pyplot.figure()
-#
-# pyplot.hist(score_games_morethan_6_home, bins=30, density= True)
-# pyplot.gca().set(title='Distribution of Home Team Scores, at Stadiums With Greater Than The Mean Arrests at The Stadium\n 2011-2015',xlabel='Points' ,ylabel='Probability')
-# pyplot.figure()
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+pyplot.hist(score_games_morethan_6_home, bins=30, density= True)
+pyplot.xlabel('Points', fontsize = axis_size)
+pyplot.ylabel('Probability Density' , fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title(label = "Distribution of Home Team Scores:\n Stadiums With More Than The Mean Arrests at The Stadium\n 2011-2015", fontsize = title_sz)
+pyplot.subplots_adjust(    top=top_p,
+    bottom=bot_p,
+    left=left_p,
+    right=right_p,
+    hspace=hspace,
+    wspace=wspace)
+pyplot.savefig('mt_avearrest_sc.png')
 
-# pyplot.hist(score_games_lessthan_6_home, bins=30, density= True)
-# pyplot.gca().set(title='Distribution of Home Team Scores, at Stadiums With Less Than The Mean Arrests at The Stadium\n 2011-2015',xlabel='Points' ,ylabel='Probability')
-# pyplot.figure()
+
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+pyplot.hist(score_games_lessthan_6_home, bins=30, density= True)
+pyplot.xlabel('Points', fontsize = axis_size)
+pyplot.ylabel('Probability Density' , fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title(label = "Distribution of Home Team Scores:\n Stadiums With Less Than The Mean Arrests at The Stadium\n 2011-2015", fontsize = title_sz)
+pyplot.subplots_adjust(    top=top_p,
+    bottom=bot_p,
+    left=left_p,
+    right=right_p,
+    hspace=hspace,
+    wspace=wspace)
+pyplot.savefig('lt_avearrest_sc.png')
+
 
 # pyplot.hist(home_team_wins,bins = 30, density=True)
 # pyplot.gca().set(title='Distribution of Arrests, at Stadiums Where Home Team Won\n 2011-2015',xlabel='Arrests' ,ylabel='Probability')
 # pyplot.figure()
 # pyplot.hist(home_team_losses,bins = 30, density=True)
-# pyplot.gca().set(title='Distribution of Arrests, at Stadiums Where Home Team Lost\n 2011-2015',xlabel='Arrests' ,ylabel='Probability')
-# pyplot.figure()
+#
+
 # pyplot.hist(home_team_losses,bins = 30, density=True)
 # pyplot.gca().set(title='Distribution of Arrests, at Stadiums Where Home Team Lost\n 2011-2015',xlabel='Arrests' ,ylabel='Probability')
 # pyplot.figure()
 #
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
 pyplot.hist(clt_arrests,bins = 30, density=True)
-pyplot.gca().set(title='Distribution of the Sample Means of Arrests, 300 samples, size n = 30 each\n 2011-2015',xlabel='Sample Mean Arrests' ,ylabel='Probability Density')
-pyplot.figure()
+pyplot.xlabel('Sample Means of Arrests', fontsize = axis_size)
+pyplot.ylabel('Probability Density' , fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title(label = "Distribution of the Sample Means of Arrests, 300 samples, size n = 30 each\n 2011-2015", fontsize= title_sz)
+pyplot.subplots_adjust(    top=top_p,
+    bottom=bot_p,
+    left=left_p,
+    right=right_p,
+    hspace=hspace,
+    wspace=wspace)
+pyplot.savefig('clt_mean_arrests.png')
 
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
 pyplot.hist(clt_var_arrests, bins=100, density=True)
-pyplot.gca().set(title='Distribution of the Sample Variances of Arrests, 300 samples, each sample of n = 30 each \n 2011-2015',xlabel='Sample Variances of Arrests' ,ylabel='Probability Density')
-pyplot.figure()
+pyplot.xlabel('Sample Variances of Arrests', fontsize = axis_size)
+pyplot.ylabel('Probability Density' , fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title(label = "Distribution of the Sample Variances of Arrests \n 300 samples, each sample of n = 30 each \n 2011-2015", fontsize = title_sz)
+pyplot.subplots_adjust(    top=top_p,
+    bottom=bot_p,
+    left=left_p+.039,
+    right=right_p,
+    hspace=hspace,
+    wspace=wspace)
+pyplot.savefig('clt_var_arrests.png')
 
-#
+
+#--Home team wins, dist of arrests
+
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+pyplot.hist(ht_win_arrests_clt, bins=30, density= True)
+pyplot.xlabel('Arrests', fontsize = axis_size)
+pyplot.ylabel('Probability Density' , fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title(label = "Distribution of Arrests at Stadiums Where Home Team Won \n CLT of 150 Samples, of n = 30 each\n 2011-2015", fontsize = title_sz)
+pyplot.subplots_adjust(    top=top_p,
+    bottom=bot_p,
+    left=left_p,
+    right=right_p,
+    hspace=hspace,
+    wspace=wspace)
+pyplot.savefig('ht_win_arr.png')
+
+
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+pyplot.hist(ht_loss_arrests_clt, bins=30, density= True)
+pyplot.xlabel('Arrests', fontsize = axis_size)
+pyplot.ylabel('Probability Density' , fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title(label = "Distribution of Arrests at Stadiums Where Home Team Lost \n CLT of 150 Samples, of n = 30 each\n 2011-2015", fontsize = title_sz)
+pyplot.subplots_adjust(    top=top_p,
+    bottom=bot_p,
+    left=left_p,
+    right=right_p,
+    hspace=hspace,
+    wspace=wspace)
+pyplot.savefig('ht_loss_arr.png')
+
 #
 # pyplot.hist(point_differential,bins =  30, density=True)
 # pyplot.gca().set(title='Point differentials',xlabel='Points', ylabel='Probability')
@@ -201,12 +319,19 @@ pyplot.figure()
 # pyplot.gca().set(title='Distribution of Away Team Scores, with greater than the mean arrests at the stadium\n 2011-2015',xlabel='Points' ,ylabel='Probability')
 # pyplot.figure()
 
+
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
 sub = pyplot.barh(total_arrests_by_teams['home_team'],total_arrests_by_teams['total_arr'])
 pyplot.bar_label(sub)
-pyplot.xlabel("Arrests")
-pyplot.ylabel("Home Team")
-pyplot.title("Arrests of Fans by Home Team Stadium, 2011-2015")
-pyplot.figure()
+pyplot.xlabel("Arrests",fontsize = axis_size)
+pyplot.ylabel("Home Team", fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title("Arrests of Fans by Home Team Stadium, 2011-2015",fontsize=title_sz)
+pyplot.subplots_adjust(
+
+    left= .226,)
+pyplot.savefig('ArrestsByHomeTeam.png')
+
 
 # pyplot.barh(avg_arrests_per_game['home_team'],avg_arrests_per_game['mean_arr'])
 # pyplot.xlabel("Avg Arrests (per game)")

@@ -18,3 +18,5 @@ def random_sample(frame : pd,samples_total = 300, sample_size = 30,var = False):
             sample_stats.append(stats.tmean(samples))
     return sample_stats
 
+def t_interval(list, ci = .95 ):
+    return stats.t.interval(ci,len(list)-1, loc = stats.tmean(list) )
