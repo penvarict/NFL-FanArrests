@@ -142,15 +142,17 @@ print(f"The ci for the var is {method.chi_2(score_games_lessthan_6_total)}")
 
 
 #--arrest stats
-mean_arrests_ht_win = stats.tmean(home_team_wins_arrests)
-mean_arrests_ht_loss = stats.tmean(home_team_losses_arrests)
+mean_arrests_ht_win = stats.tmean(ht_win_arrests_clt)
+mean_arrests_ht_loss = stats.tmean(ht_loss_arrests_clt)
 var_arrests_ht_win = stats.tmean(ht_win_arrests_clt_var)
 var_arrests_ht_loss = stats.tmean(ht_loss_arrests_clt_var)
 
-print(f"The average arrests where ht won {mean_arrests_ht_win}, ci {method.t_interval(home_team_wins_arrests)}")
-print(f"var {var_arrests_ht_win}, ci = {method.chi_2(home_team_wins_arrests)}")
-print(f"The average arrests where ht lost {mean_arrests_ht_loss}, ci {method.t_interval(home_team_losses_arrests)}")
-print(f"var {var_arrests_ht_loss}, ci = {method.chi_2(home_team_losses_arrests)}")
+print(f"The average arrests where ht won {mean_arrests_ht_win}, ci {method.t_interval(ht_win_arrests_clt)}")
+print(f"var {var_arrests_ht_win}, ci = {method.t_interval(ht_win_arrests_clt_var)}")
+print(f"The average arrests where ht lost {mean_arrests_ht_loss}, ci {method.t_interval(ht_loss_arrests_clt)}")
+print(f"var {var_arrests_ht_loss}, ci = {method.t_interval(ht_loss_arrests_clt_var)}")
+
+
 print(f"t-test {stats.ttest_ind(ht_win_arrests_clt,ht_loss_arrests_clt,equal_var=False)}")
 
 
@@ -158,7 +160,8 @@ print(f"t-test {stats.ttest_ind(ht_win_arrests_clt,ht_loss_arrests_clt,equal_var
 print('#'*20)
 print("Population Statistics: \n")
 avg_total_points_scored = stats.tmean(total_points_cut)
-print(f"Average total points scored {avg_total_points_scored}, ci: {method.t_interval(total_points_cut)}, n = {len(total_points_cut)}")
+print(f"Average total points scored {avg_total_points_scored}, ci: {method.t_interval(total_points_cut)}, \n "
+      f"n = {len(total_points_cut)} var = {stats.tvar(total_points_cut)} ci = {method.chi_2(total_points_cut)}")
 avg_point_diff = stats.tmean(point_differential)
 print(f"Average point differential {avg_point_diff} ci: {method.t_interval(point_differential)}, n = {len(point_differential)}")
 
@@ -184,7 +187,7 @@ clt_var_arrests = method.random_sample(arrests_cut, var=True) #extract the dist 
 #---by clt, the mean of the distribution of clt is the population variance
 clt_var_arrests_val = stats.tmean(clt_var_arrests)
 print(f'The variance in the number of arrests per game is {clt_var_arrests_val}, std is {sqrt(clt_var_arrests_val)}')
-ci_v = stats.t.interval(0.05, len(clt_var_arrests) - 1, loc=clt_var_arrests_val)
+ci_v = method.t_interval(clt_var_arrests)
 print(f"The confidence interval of the variance by chi squared dist is {ci_v}")
 
 # print("The total arrests by team: ")
@@ -366,4 +369,4 @@ pyplot.savefig('ArrestsByHomeTeam.png')
 # pyplot.title("Average Arrests by team, 2011-2015")
 
 
-pyplot.show()
+#pyplot.show()
