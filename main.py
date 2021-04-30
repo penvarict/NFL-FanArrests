@@ -344,11 +344,26 @@ pyplot.title(label = "Distribution of Total Points Scored, by Games With \n Abov
                      "\n 2011-2015", fontsize = title_sz)
 pyplot.subplots_adjust(    top=top_p,
     bottom=bot_p,
-    left=left_p,
+    left=left_p+.03,
     right=right_p,
     hspace=hspace,
     wspace=wspace)
-pyplot.savefig('tot_points.png')
+pyplot.savefig('tot_points_above_mean.png')
+
+pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+pyplot.hist(score_games_lessthan_6_total, bins=30, density= True)
+pyplot.xlabel('Total Points', fontsize = axis_size)
+pyplot.ylabel('Probability Density' , fontsize = axis_size)
+pyplot.tick_params(axis='both', labelsize=tick_sz)
+pyplot.title(label = "Distribution of Total Points Scored, by Games With \n Less Than Mean Arrests"
+                     "\n 2011-2015", fontsize = title_sz)
+pyplot.subplots_adjust(    top=top_p,
+    bottom=bot_p,
+    left=left_p+.03,
+    right=right_p,
+    hspace=hspace,
+    wspace=wspace)
+pyplot.savefig('tot_points_below_mean.png')
 
 
 pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
@@ -369,4 +384,4 @@ pyplot.savefig('ArrestsByHomeTeam.png')
 # pyplot.title("Average Arrests by team, 2011-2015")
 
 
-#pyplot.show()
+pyplot.show()
