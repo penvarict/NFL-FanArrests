@@ -248,19 +248,19 @@ pyplot.subplots_adjust(    top=top_p,
 pyplot.savefig('mt_avearrest_sc.png')
 
 
-pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
-pyplot.hist(score_games_lessthan_6_home, bins=30, density= True)
-pyplot.xlabel('Points', fontsize = axis_size)
-pyplot.ylabel('Probability Density' , fontsize = axis_size)
-pyplot.tick_params(axis='both', labelsize=tick_sz)
-pyplot.title(label = "Distribution of Home Team Scores:\n Stadiums With Less Than The Mean Arrests at The Stadium\n 2011-2015", fontsize = title_sz)
-pyplot.subplots_adjust(    top=top_p,
-    bottom=bot_p,
-    left=left_p,
-    right=right_p,
-    hspace=hspace,
-    wspace=wspace)
-pyplot.savefig('lt_avearrest_sc.png')
+# pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+# pyplot.hist(score_games_lessthan_6_home, bins=30, density= True)
+# pyplot.xlabel('Points', fontsize = axis_size)
+# pyplot.ylabel('Probability Density' , fontsize = axis_size)
+# pyplot.tick_params(axis='both', labelsize=tick_sz)
+# pyplot.title(label = "Distribution of Home Team Scores:\n Stadiums With Less Than The Mean Arrests at The Stadium\n 2011-2015", fontsize = title_sz)
+# pyplot.subplots_adjust(    top=top_p,
+#     bottom=bot_p,
+#     left=left_p,
+#     right=right_p,
+#     hspace=hspace,
+#     wspace=wspace)
+# pyplot.savefig('lt_avearrest_sc.png')
 
 
 
@@ -279,19 +279,19 @@ pyplot.subplots_adjust(    top=top_p,
     wspace=wspace)
 pyplot.savefig('clt_mean_arrests.png')
 
-pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
-pyplot.hist(clt_var_arrests, bins=100, density=True)
-pyplot.xlabel('Sample Variances of Arrests', fontsize = axis_size)
-pyplot.ylabel('Probability Density' , fontsize = axis_size)
-pyplot.tick_params(axis='both', labelsize=tick_sz)
-pyplot.title(label = "Distribution of the Sample Variances of Arrests \n 300 samples, each sample of n = 30 each \n 2011-2015", fontsize = title_sz)
-pyplot.subplots_adjust(    top=top_p,
-    bottom=bot_p,
-    left=left_p+.039,
-    right=right_p,
-    hspace=hspace,
-    wspace=wspace)
-pyplot.savefig('clt_var_arrests.png')
+# pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+# pyplot.hist(clt_var_arrests, bins=100, density=True)
+# pyplot.xlabel('Sample Variances of Arrests', fontsize = axis_size)
+# pyplot.ylabel('Probability Density' , fontsize = axis_size)
+# pyplot.tick_params(axis='both', labelsize=tick_sz)
+# pyplot.title(label = "Distribution of the Sample Variances of Arrests \n 300 samples, each sample of n = 30 each \n 2011-2015", fontsize = title_sz)
+# pyplot.subplots_adjust(    top=top_p,
+#     bottom=bot_p,
+#     left=left_p+.039,
+#     right=right_p,
+#     hspace=hspace,
+#     wspace=wspace)
+# pyplot.savefig('clt_var_arrests.png')
 
 
 #--Home team wins, dist of arrests
@@ -301,7 +301,7 @@ pyplot.hist(ht_win_arrests_clt, bins=30, density= True)
 pyplot.xlabel('Arrests', fontsize = axis_size)
 pyplot.ylabel('Probability Density' , fontsize = axis_size)
 pyplot.tick_params(axis='both', labelsize=tick_sz)
-pyplot.title(label = "Distribution of Arrests at Stadiums Where Home Team Won \n CLT of 150 Samples, of n = 30 each\n 2011-2015", fontsize = title_sz)
+pyplot.title(label = "Distribution of Arrests at Stadiums Where The Home Team Won \n CLT of n = 150, With 30 Subsamples Each\n 2011-2015", fontsize = title_sz)
 pyplot.subplots_adjust(    top=top_p,
     bottom=bot_p,
     left=left_p,
@@ -316,7 +316,7 @@ pyplot.hist(ht_loss_arrests_clt, bins=30, density= True)
 pyplot.xlabel('Arrests', fontsize = axis_size)
 pyplot.ylabel('Probability Density' , fontsize = axis_size)
 pyplot.tick_params(axis='both', labelsize=tick_sz)
-pyplot.title(label = "Distribution of Arrests at Stadiums Where Home Team Lost \n CLT of 150 Samples, of n = 30 each\n 2011-2015", fontsize = title_sz)
+pyplot.title(label = "Distribution of Arrests at Stadiums Where The Home Team Lost \n CLT of n = 150 Samples, With 30 Subsamples Each\n 2011-2015", fontsize = title_sz)
 pyplot.subplots_adjust(    top=top_p,
     bottom=bot_p,
     left=left_p,
@@ -334,48 +334,48 @@ pyplot.savefig('ht_loss_arr.png')
 # pyplot.hist(lose_lt_12,bins = 30, density=True)
 # pyplot.gca().set(title='Distribution of Arrests from games where the home team \nlost by less than the mean point diff',
 #                  xlabel='Arrests', ylabel='Probability')
+#
+# pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+# pyplot.hist(score_games_morethan_6_total, bins=30, density= True)
+# pyplot.xlabel('Total Points', fontsize = axis_size)
+# pyplot.ylabel('Probability Density' , fontsize = axis_size)
+# pyplot.tick_params(axis='both', labelsize=tick_sz)
+# pyplot.title(label = "Distribution of Total Points Scored, by Games With \n Above Mean Arrests"
+#                      "\n 2011-2015", fontsize = title_sz)
+# pyplot.subplots_adjust(    top=top_p,
+#     bottom=bot_p,
+#     left=left_p+.03,
+#     right=right_p,
+#     hspace=hspace,
+#     wspace=wspace)
+# pyplot.savefig('tot_points_above_mean.png')
+#
+# pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+# pyplot.hist(score_games_lessthan_6_total, bins=30, density= True)
+# pyplot.xlabel('Total Points', fontsize = axis_size)
+# pyplot.ylabel('Probability Density' , fontsize = axis_size)
+# pyplot.tick_params(axis='both', labelsize=tick_sz)
+# pyplot.title(label = "Distribution of Total Points Scored, by Games With \n Less Than Mean Arrests"
+#                      "\n 2011-2015", fontsize = title_sz)
+# pyplot.subplots_adjust(    top=top_p,
+#     bottom=bot_p,
+#     left=left_p+.03,
+#     right=right_p,
+#     hspace=hspace,
+#     wspace=wspace)
+# pyplot.savefig('tot_points_below_mean.png')
 
-pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
-pyplot.hist(score_games_morethan_6_total, bins=30, density= True)
-pyplot.xlabel('Total Points', fontsize = axis_size)
-pyplot.ylabel('Probability Density' , fontsize = axis_size)
-pyplot.tick_params(axis='both', labelsize=tick_sz)
-pyplot.title(label = "Distribution of Total Points Scored, by Games With \n Above Mean Arrests"
-                     "\n 2011-2015", fontsize = title_sz)
-pyplot.subplots_adjust(    top=top_p,
-    bottom=bot_p,
-    left=left_p+.03,
-    right=right_p,
-    hspace=hspace,
-    wspace=wspace)
-pyplot.savefig('tot_points_above_mean.png')
-
-pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
-pyplot.hist(score_games_lessthan_6_total, bins=30, density= True)
-pyplot.xlabel('Total Points', fontsize = axis_size)
-pyplot.ylabel('Probability Density' , fontsize = axis_size)
-pyplot.tick_params(axis='both', labelsize=tick_sz)
-pyplot.title(label = "Distribution of Total Points Scored, by Games With \n Less Than Mean Arrests"
-                     "\n 2011-2015", fontsize = title_sz)
-pyplot.subplots_adjust(    top=top_p,
-    bottom=bot_p,
-    left=left_p+.03,
-    right=right_p,
-    hspace=hspace,
-    wspace=wspace)
-pyplot.savefig('tot_points_below_mean.png')
-
-
-pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
-sub = pyplot.barh(total_arrests_by_teams['home_team'],total_arrests_by_teams['total_arr'])
-pyplot.bar_label(sub)
-pyplot.xlabel("Arrests",fontsize = axis_size)
-pyplot.ylabel("Home Team", fontsize = axis_size)
-pyplot.tick_params(axis='both', labelsize=tick_sz)
-pyplot.title("Arrests of Fans by Home Team Stadium, 2011-2015",fontsize=title_sz)
-pyplot.subplots_adjust(
-    left= .226,)
-pyplot.savefig('ArrestsByHomeTeam.png')
+#
+# pyplot.figure(figsize=(pt_x_size, pt_y_size), dpi=100)
+# sub = pyplot.barh(total_arrests_by_teams['home_team'],total_arrests_by_teams['total_arr'])
+# pyplot.bar_label(sub)
+# pyplot.xlabel("Arrests",fontsize = axis_size)
+# pyplot.ylabel("Home Team", fontsize = axis_size)
+# pyplot.tick_params(axis='both', labelsize=tick_sz)
+# pyplot.title("Arrests of Fans by Home Team Stadium, 2011-2015",fontsize=title_sz)
+# pyplot.subplots_adjust(
+#     left= .226,)
+# pyplot.savefig('ArrestsByHomeTeam.png')
 
 
 # pyplot.barh(avg_arrests_per_game['home_team'],avg_arrests_per_game['mean_arr'])
